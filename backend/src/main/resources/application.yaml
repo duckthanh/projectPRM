@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+app:
+  security:
+    two-factor-login-enabled: true
+
+logging:
+  level:
+    com.example.backend.security: DEBUG
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/myschool
+    username: root
+    password: 21112004
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+jwt:
+  secret-key: u2y1ESGM5PL2grZlGPz4XYkAK1wAtB7Do8x44Et06tWyuFBeUfKxY1W0Fb3PqKye
+  expiration: 86400000
+  refresh-expiration: 604800000
+
+sms:
+  enabled: false
+  api-key: 8B53A3FAD8F24C4EA84A73E4F7DA07          
+  secret-key: 61217FF1E1E9C6105101ECC7928E5F
