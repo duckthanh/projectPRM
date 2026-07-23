@@ -65,6 +65,16 @@ class ApplicationApi {
         .toList();
   }
 
+  /// Giáo viên xem toàn bộ đơn (giống webapp)
+  Future<List<ApplicationModel>> getAllApplications() async {
+    final list = await _client.getJsonList(
+      ApiConfig.uri('/api/applications/all'),
+    );
+    return list
+        .map((e) => ApplicationModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   /// Giáo viên duyệt/từ chối đơn
   Future<ApplicationModel> respondToApplication({
     required int applicationId,

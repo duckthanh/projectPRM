@@ -42,6 +42,11 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
 
+  # Teacher Excel import (web + mobile)
+  file_picker: ^8.1.7
+  path_provider: ^2.1.5
+  open_filex: ^4.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

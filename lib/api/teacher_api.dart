@@ -1,6 +1,7 @@
 import '../models/student_score_model.dart';
 import '../models/class_statistics_model.dart';
 import '../models/academic_summary_model.dart';
+import '../models/score_import_model.dart';
 import 'api_client.dart';
 import 'api_config.dart';
 
@@ -109,5 +110,53 @@ class TeacherApi {
   /// Xóa điểm
   Future<void> deleteScore(int scoreId) async {
     await _client.delete(ApiConfig.uri('/api/teacher/scores/$scoreId'));
+  }
+
+  Future<ScoreImportResult> previewScoreImport({
+    required int classId,
+    required String academicYear,
+    required int semester,
+    required List<int> fileBytes,
+    required String filename,
+  }) async {
+    final json = await _client.postMultipart(
+      ApiConfig.uri('/api/teacher/scores/import/preview'),
+      fields: {
+        'classId': '$classId',
+        'academicYear': academicYear,
+        'semester': '$semester',
+      },
+      fileField: 'file',
+      fileBytes: fileBytes,
+      filename: filename,
+    );
+    return ScoreImportResult.fromJson(json);
+  }
+
+  Future<ScoreImportResult> importScoresExcel({
+    required int classId,
+    required String academicYear,
+    required int semester,
+    required List<int> fileBytes,
+    required String filename,
+  }) async {
+    final json = await _client.postMultipart(
+      ApiConfig.uri('/api/teacher/scores/import'),
+      fields: {
+        'classId': '$classId',
+        'academicYear': academicYear,
+        'semester': '$semester',
+      },
+      fileField: 'file',
+      fileBytes: fileBytes,
+      filename: filename,
+    );
+    return ScoreImportResult.fromJson(json);
+  }
+
+  Future<List<int>> downloadScoreImportTemplate() async {
+    return _client.getBytes(
+      ApiConfig.uri('/api/teacher/scores/import/template'),
+    );
   }
 }

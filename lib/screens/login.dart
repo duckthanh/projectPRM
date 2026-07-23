@@ -6,7 +6,7 @@ import 'home.dart';
 import 'forgot_password.dart';
 import 'login_otp_screen.dart';
 import 'register.dart';
-import 'teacher_home.dart';
+import 'teacher/teacher_home_screen.dart';
 import '../api/api_client.dart' show ApiClient, ApiException;
 import '../api/user_api.dart';
 import '../api/auth_storage.dart';

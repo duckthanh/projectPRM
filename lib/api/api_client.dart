@@ -99,5 +99,43 @@ class ApiClient {
       throw ApiException(res.statusCode, res.body);
     }
   }
+
+  /// Multipart POST (import Excel). Không set Content-Type để boundary tự gắn.
+  Future<Map<String, dynamic>> postMultipart(
+    Uri uri, {
+    required Map<String, String> fields,
+    required String fileField,
+    required List<int> fileBytes,
+    required String filename,
+    bool withAuth = true,
+  }) async {
+    final request = http.MultipartRequest('POST', uri);
+    if (withAuth && AuthStorage.accessToken != null) {
+      request.headers['Authorization'] = 'Bearer ${AuthStorage.accessToken}';
+    }
+    request.fields.addAll(fields);
+    request.files.add(
+      http.MultipartFile.fromBytes(fileField, fileBytes, filename: filename),
+    );
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      throw ApiException(res.statusCode, res.body);
+    }
+    if (res.body.isEmpty) return <String, dynamic>{};
+    return jsonDecode(res.body) as Map<String, dynamic>;
+  }
+
+  Future<List<int>> getBytes(Uri uri, {bool withAuth = true}) async {
+    final headers = <String, String>{};
+    if (withAuth && AuthStorage.accessToken != null) {
+      headers['Authorization'] = 'Bearer ${AuthStorage.accessToken}';
+    }
+    final res = await _client.get(uri, headers: headers);
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      throw ApiException(res.statusCode, res.body);
+    }
+    return res.bodyBytes;
+  }
 }
 
